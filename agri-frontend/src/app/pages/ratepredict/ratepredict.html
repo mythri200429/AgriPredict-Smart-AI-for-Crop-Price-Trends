@@ -1,0 +1,157 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Crop Rate Prediction</div>
+    <div class="filter-card">
+        <form>
+            <div class="grid">
+
+                <!-- State -->
+                <div class="col">
+                    <label>State <span class="required">*</span>
+                    </label>
+                    <p-select [options]="stateList" [(ngModel)]="filters.state" name="state" placeholder="Select State"
+                        (onChange)="loadDistricts()" [showClear]="true">
+                    </p-select>
+                </div>
+
+                <!-- District -->
+                <div class="col">
+                    <label>District <span class="required">*</span></label>
+                    <p-select [options]="districtList" [(ngModel)]="filters.district" (onChange)="onChangesFiled()"
+                        name="district" placeholder="Select District" [showClear]="true">
+                    </p-select>
+                </div>
+
+                <!-- Market -->
+                <div class="col">
+                    <label>Soil <span class="required">*</span></label>
+                    <p-select [options]="soilList" [(ngModel)]="filters.soil" (onChange)="loadCrops()" name="market"
+                        placeholder="Select Soil" [showClear]="true">
+                    </p-select>
+                </div>
+
+                <!-- Commodity -->
+                <div class="col">
+                    <label>Crop <span class="required">*</span></label>
+                    <p-select [options]="commodityList" [(ngModel)]="filters.commodity" name="commodity"
+                        (onChange)="onChangesFiled()" placeholder="Select Commodity" [showClear]="true">
+                    </p-select>
+                </div>
+
+            </div>
+            <br />
+
+
+        </form>
+        <div class="grid">
+            <div class="col">
+                <label>Date <span class="required">*</span></label>
+                <p-datepicker [(ngModel)]="selectedDate" dateFormat="dd-mm-yy" />
+            </div>
+            <div class="col">
+                <div class="btn-group">
+                    <button pButton type="button" (click)="applyFilters()" label="Search"
+                        class="p-button-success"></button>
+                    <button pButton type="button" label="Reset Filters" class="p-button-secondary"
+                        (click)="resetFilters()"></button>
+                    <p-toast />
+                </div>
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+
+
+        </div>
+        <ng-container *ngIf="!isValid">
+            <br />
+            <p-message severity="error">{{message}}</p-message>
+        </ng-container>
+    </div>
+
+    <div *ngIf="isLoadingPrediction" class="filter-card">
+        <div style="display: flex;justify-content: center;align-items: center;">
+            <p-progress-spinner ariaLabel="loading" />
+        </div>
+        <div style="display: flex;justify-content: center;align-items: center;">
+            <h2 class="title">AI Prediction model is running please wait</h2>
+        </div>
+    </div>
+    <div *ngIf="!isLoadingPrediction && !(predictions.length > 0) && isError" class="filter-card">
+
+        <div style="display: flex;justify-content: center;align-items: center;">
+            <h2 class="title">Not enough historical records (need ~6+)</h2>
+        </div>
+    </div>
+    <div *ngIf="!isLoadingPrediction && predictions.length > 0" class="filter-card">
+        <div class="card p-4 shadow-3 border-round-xl prediction-container">
+
+            <h4 class="text-center mb-4 text-purple-600">📅 Exact Date Price Prediction</h4>
+
+            <div class="grid-new">
+
+                <div class="col-12 mb-3">
+                    <label class="font-bold text-lg">
+                        <i class="pi pi-calendar mr-2 text-purple-500"></i>
+                        Date:
+                    </label>
+                    <div class="text-xl mt-2">{{ datePrediction?.Date | date:'dd-mm-yyyy' }}</div>
+                </div>
+
+                <div class="col-6">
+                    <label class="font-bold">Predicted Min Price</label>
+                    <div class="price-card min-card">₹ {{ datePrediction?.Predicted_Min_Price }}</div>
+                </div>
+
+                <div class="col-6">
+                    <label class="font-bold">Predicted Max Price</label>
+                    <div class="price-card max-card">₹ {{ datePrediction?.Predicted_Max_Price }}</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card p-4 shadow-3 border-round-xl prediction-container">
+
+            <h4 class="text-center mb-4 text-primary">📈 Monthly Price Prediction</h4>
+
+            <p-table [value]="predictions" [paginator]="true" [rows]="6" [rowsPerPageOptions]="[6, 12]"
+                responsiveLayout="scroll" class="custom-table">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Month</th>
+                        <th>Predicted Min Price</th>
+                        <th>Predicted Max Price</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <!-- MONTH -->
+                        <td class="font-bold">
+                            <i class="pi pi-calendar mr-2 text-primary"></i>
+                            {{ row.month }}
+                        </td>
+
+                        <!-- MIN PRICE -->
+                        <td>
+                            <span class="price-badge min-badge">
+                                ₹ {{ row.predicted_min | number }}
+                            </span>
+                        </td>
+
+                        <!-- MAX PRICE -->
+                        <td>
+                            <span class="price-badge max-badge">
+                                ₹ {{ row.predicted_max | number }}
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+
+    </div>
+</div>

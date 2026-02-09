@@ -1,0 +1,26 @@
+<p-card class="profile-card shadow-4" header="User Profile">
+    <div class="profile-container">
+
+        <div class="avatar-section">
+            <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" class="avatar" />
+            <h3>{{ user.name }}</h3>
+            <p class="mobile">📞 {{ user.mobile }}</p>
+        </div>
+
+        <div class="details-section">
+            <p><strong>State:</strong> {{ user.state }}</p>
+            <p><strong>District:</strong> {{ user.district }}</p>
+            <p><strong>Crops Grown:</strong></p>
+
+            <ul>
+                <li *ngFor="let crop of user.crops">
+                    🌿 {{ crop }}
+                </li>
+            </ul>
+
+            <button pButton type="button" label="Sign Out" class="p-button-danger mt-3" (click)="signOut()">
+            </button>
+        </div>
+
+    </div>
+</p-card>

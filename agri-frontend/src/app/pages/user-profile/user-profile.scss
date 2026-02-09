@@ -1,0 +1,45 @@
+.profile-card {
+  width: 450px;
+  margin: 20px auto;
+  border-radius: 16px;
+}
+
+.profile-container {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+}
+
+.avatar-section {
+  text-align: center;
+}
+
+.avatar {
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  border: 3px solid #4caf50;
+}
+
+.mobile {
+  color: #555;
+  font-size: 14px;
+}
+
+.details-section {
+  flex: 1;
+  font-size: 15px;
+}
+
+.details-section p {
+  margin: 6px 0;
+}
+
+ul {
+  padding-left: 16px;
+}
+
+button {
+  width: 120px;
+  border-radius: 8px;
+}

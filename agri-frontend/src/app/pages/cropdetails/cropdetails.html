@@ -1,0 +1,128 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Crop Information</div>
+    <div class="grid">
+        <p-table [value]="crops" [paginator]="true" [rows]="5" [rowHover]="true" selectionMode="single" dataKey="_id"
+            (onRowSelect)="openDetails($event.data)" class="crop-table">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Image</th>
+                    <th>Crop</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-row>
+                <tr [pSelectableRow]="row">
+                    <td><img [src]="row.image_url" class="crop-img" /></td>
+                    <td class="crop-name">{{ row.crop_name }}</td>
+                    <td>{{ row.overview | slice:0:60 }}...</td>
+                    <td>
+                        <button pButton icon="pi pi-eye" class="p-button-rounded p-button-info p-button-sm"
+                            (click)="openDetails(row)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <!-- 🌟 Stylish Crop Popup -->
+        <p-dialog [(visible)]="showDialog" [modal]="true" [style]="{ width: '700px' }"
+            [breakpoints]="{ '960px': '90vw', '640px': '95vw' }" [closable]="true" [draggable]="false"
+            [resizable]="false" header="{{ selectedCrop?.crop_name }}">
+            <div *ngIf="selectedCrop" class="dialog-container">
+
+                <!-- Header -->
+                <div class="dialog-header">
+                    <img [src]="selectedCrop.image_url" alt="{{ selectedCrop.crop_name }}" class="dialog-img" />
+                    <div class="dialog-title">
+                        <h2>{{ selectedCrop.crop_name }}</h2>
+                        <p class="overview">{{ selectedCrop.overview }}</p>
+                    </div>
+                </div>
+
+                <!-- Soil Section -->
+                <div class="section">
+                    <h4>🌱 Soil Requirements</h4>
+                    <ul>
+                        <li><b>Soil Type:</b> {{ selectedCrop.soil_requirements.soil_type }}</li>
+                        <li><b>pH Range:</b> {{ selectedCrop.soil_requirements.ph_range }}</li>
+                        <li><b>Drainage:</b> {{ selectedCrop.soil_requirements.drainage }}</li>
+                        <li><b>Organic Matter:</b> {{ selectedCrop.soil_requirements.organic_matter }}</li>
+                    </ul>
+                </div>
+
+                <!-- Climate & Weather -->
+                <div class="section">
+                    <h4>🌦 Climate & Weather</h4>
+                    <ul>
+                        <li><b>Ideal Temperature:</b> {{ selectedCrop.climate_and_weather.ideal_temperature }}</li>
+                        <li><b>Sunlight:</b> {{ selectedCrop.climate_and_weather.sunlight }}</li>
+                        <li><b>Rainfall:</b> {{ selectedCrop.climate_and_weather.rainfall }}</li>
+                        <li><b>Avoid Conditions:</b>
+                            <span
+                                *ngFor="let condition of selectedCrop.climate_and_weather.avoid_conditions; let i = index">
+                                {{condition}}{{i < (selectedCrop.climate_and_weather.avoid_conditions.length -1) ? ', '
+                                    : '' }} </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Water Requirements -->
+                <div class="section">
+                    <h4>💧 Water Requirements</h4>
+                    <ul>
+                        <li><b>Seedling Stage:</b> {{ selectedCrop.water_requirements.seedling_stage }}</li>
+                        <li><b>Vegetative Stage:</b> {{ selectedCrop.water_requirements.vegetative_stage }}</li>
+                        <li><b>Flowering Stage:</b> {{ selectedCrop.water_requirements.flowering_stage }}</li>
+                    </ul>
+                </div>
+
+                <!-- Fertilizer Schedule -->
+                <div class="section">
+                    <h4>💊 Fertilizer Schedule</h4>
+                    <ul>
+                        <li><b>Basal Dose FYM:</b> {{ selectedCrop.fertilizer_schedule.basal_dose.fym }}</li>
+                        <li><b>Basal Dose NPK:</b> {{ selectedCrop.fertilizer_schedule.basal_dose.npk }}</li>
+                        <li *ngFor="let top of selectedCrop.fertilizer_schedule.top_dressing">
+                            <b>Top Dressing ({{top.day}}):</b> {{top.application}}
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Pests -->
+                <div class="section">
+                    <h4>🐛 Common Pests</h4>
+                    <ul>
+                        <li *ngFor="let pest of selectedCrop.pests_and_control">
+                            <b>{{pest.pest}}:</b> {{pest.control}}
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Diseases -->
+                <div class="section">
+                    <h4>🦠 Diseases</h4>
+                    <ul>
+                        <li *ngFor="let disease of selectedCrop.diseases_and_control">
+                            <b>{{disease.disease}}:</b> {{disease.control}}
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Harvesting -->
+                <div class="section">
+                    <h4>🌾 Harvesting</h4>
+                    <ul>
+                        <li><b>First Harvest:</b> {{ selectedCrop.harvesting.first_harvest }}</li>
+                        <li><b>Frequency:</b> {{ selectedCrop.harvesting.frequency }}</li>
+                        <li><b>Notes:</b> {{ selectedCrop.harvesting.notes }}</li>
+                    </ul>
+                </div>
+
+            </div>
+        </p-dialog>
+
+
+    </div>
+
+</div>

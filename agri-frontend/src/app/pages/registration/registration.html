@@ -1,0 +1,116 @@
+<app-floating-configurator />
+<div
+    class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-col items-center justify-center">
+        <div
+            style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
+            <div class="w-full bg-surface-0 dark:bg-surface-900 py-15 px-8 sm:px-20" style="border-radius: 53px">
+                <div class="text-center mb-8">
+                    <div style="display: flex;align-items: center;justify-content: center;">
+                        <img style="width:120px;" src="assets/images/AgriPredict.png" alt="AgriPredict Logo">
+                    </div>
+                    <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to AgriPredict!
+                    </div>
+                </div>
+                <div>
+                    <form [formGroup]="registerForm" (ngSubmit)="register()">
+                        <div class="grid-container">
+                            <!-- NAME -->
+                            <div class="p-field">
+                                <label>Name *</label>
+                                <input pInputText formControlName="name" (blur)="markAsTouched('name')" />
+
+                                <small class="error" *ngIf="isInvalid('name')">
+                                    Name is required
+                                </small>
+                            </div>
+
+                            <!-- MOBILE -->
+                            <div class="p-field">
+                                <label>Mobile *</label>
+                                <input pInputText maxlength="10" formControlName="mobile"
+                                    (blur)="markAsTouched('mobile')" />
+
+                                <small class="error" *ngIf="isInvalid('mobile')">
+                                    Enter valid 10-digit mobile number
+                                </small>
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="p-field">
+                                <label>Email *</label>
+                                <input pInputText formControlName="email" (blur)="markAsTouched('email')" />
+
+                                <small class="error" *ngIf="isInvalid('email')">
+                                    Valid email is required
+                                </small>
+                            </div>
+
+                            <!-- STATE -->
+                            <div class="p-field">
+                                <label>State *</label>
+                                <p-select [options]="states" placeholder="Select State" formControlName="state"
+                                    (onChange)="markAsTouched('state'); loadDistricts();">
+                                </p-select>
+
+                                <small class="error" *ngIf="isInvalid('state')">
+                                    State is required
+                                </small>
+                            </div>
+
+                            <!-- DISTRICT -->
+                            <div class="p-field">
+                                <label>District *</label>
+                                <p-select [options]="districts" placeholder="Select District" formControlName="district"
+                                    (onChange)="markAsTouched('district')">
+                                </p-select>
+
+                                <small class="error" *ngIf="isInvalid('district')">
+                                    District is required
+                                </small>
+                            </div>
+
+                            <!-- CROPS (MULTISELECT) -->
+                            <div class="p-field">
+                                <label>Crops Grown Frequently *</label>
+                                <p-multiSelect [options]="cropList" placeholder="Select Crops" formControlName="crops"
+                                    (onChange)="markAsTouched('crops')">
+                                </p-multiSelect>
+
+                                <small class="error" *ngIf="isInvalid('crops')">
+                                    Select at least one crop
+                                </small>
+                            </div>
+
+                            <!-- PASSWORD -->
+                            <div class="p-field">
+                                <label>Password *</label>
+                                <input pPassword formControlName="password" (blur)="markAsTouched('password')" />
+
+                                <small class="error" *ngIf="isInvalid('password')">
+                                    Min 6 characters required
+                                </small>
+                            </div>
+
+                            <!-- CONFIRM PASSWORD -->
+                            <div class="p-field">
+                                <label>Confirm Password *</label>
+                                <input pPassword formControlName="newPassword" (blur)="markAsTouched('newPassword')" />
+
+                                <small class="error" *ngIf="passwordMismatch()">
+                                    Passwords do not match
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <button pButton label="Register" class="submit-btn"></button>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<p-toast />
